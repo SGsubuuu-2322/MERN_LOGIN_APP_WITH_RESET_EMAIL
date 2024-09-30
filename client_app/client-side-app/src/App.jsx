@@ -22,13 +22,12 @@ const router = createBrowserRouter([
     path: "/password",
     element: <Password />,
   },
-  ,
   {
     path: "/profile",
     element: (
-      <AuthorizeUser>
-        <Profile />
-      </AuthorizeUser>
+      // <AuthorizeUser>
+      <Profile />
+      // </AuthorizeUser>
     ),
   },
   {
