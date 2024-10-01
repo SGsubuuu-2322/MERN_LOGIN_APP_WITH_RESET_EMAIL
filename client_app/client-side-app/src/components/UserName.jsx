@@ -40,7 +40,7 @@ function UserName() {
               <img src={avatar} className={styles.profile_img} alt="avatar" />
             </div>
 
-            <div className="textbox flex flex-col items-center gap-6">
+            <div className="textbox flex flex-col items-center gap-3">
               <input
                 {...formik.getFieldProps("username")}
                 className={styles.textbox}
@@ -52,7 +52,7 @@ function UserName() {
               </button>
             </div>
 
-            <div className="text-center py-4">
+            <div className="text-center">
               <span className="text-gray-500">
                 Not a Member{" "}
                 <Link className="text-red-500" to="/register">
