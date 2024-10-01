@@ -2,7 +2,7 @@
 
 # dependencies
 client_app/client-side-app/node_modules
-server/node_modules
+server_app/node_modules
 server/config.js
 client_app/client-side-app/.env
 server/.env
