@@ -1,24 +1,13 @@
 // import React from "react";
-import { Link } from "react-router-dom";
 import styles from "../styles/Username.module.css";
 import { Toaster } from "react-hot-toast";
-import { useFormik } from "formik";
-import { passwordValidate } from "../helper/validate";
+
 // import { useAuthStore } from '../store/store'
 
 function Recovery() {
-  const formik = useFormik({
-    initialValues: {
-      otp: "",
-    },
-    validate: passwordValidate,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      console.log(values);
-    },
-  });
-
+  const onSubmit = (e) => {
+    console.log(e);
+  };
   return (
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
@@ -32,7 +21,7 @@ function Recovery() {
             </span>
           </div>
 
-          <form className="pt-20" onSubmit={formik.handleSubmit}>
+          <form className="pt-20" onSubmit={onSubmit}>
             <div className="textbox flex flex-col items-center gap-3">
               <div className="input text-center">
                 <span className="py-4 text-sm text-left text-gray-500">
@@ -52,9 +41,9 @@ function Recovery() {
             <div className="text-center">
               <span className="text-gray-500">
                 Can&apos;t get OPT ?{" "}
-                <Link className="text-red-500" to="/recovery">
+                <button className="text-red-500" to="/recovery">
                   Resend
-                </Link>
+                </button>
               </span>
             </div>
           </form>
