@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import connect from "./databse/connection";
+import connect from "./databse/connection.js";
+import router from "./router/routes.js";
 
 const app = express();
 
@@ -17,6 +18,8 @@ const PORT = 8080;
 app.get("/", (req, res) => {
   return res.status(200).json("Home GET request...");
 });
+
+app.use("/api", router);
 
 // Start development server...
 
