@@ -1,3 +1,6 @@
+import UserModel from "../models/user.model.js";
+import bcrypt from "bcrypt";
+
 /** POST: http://localhost:8080/api/register 
  * @param : {
   "username" : "example123",
@@ -12,7 +15,63 @@
 */
 
 export async function register(req, res) {
-  res.status(200).json("register route");
+  try {
+    const { username, email, password, profile } = req.body;
+
+    // Checking for the username
+    const existingUser = new Promise((resolve, reject) => {
+      UserModel.findOne({ username }, (err, user) => {
+        if (err) reject(new Error(err));
+        if (user) reject({ error: "Please use unique username..." });
+
+        resolve();
+      });
+    });
+
+    // Checking for the email
+    const existingEmail = new Promise((resolve, reject) => {
+      UserModel.findOne({ email }, (err, email) => {
+        if (err) reject(new Error(err));
+        if (email) reject({ error: "Please use unique email..." });
+
+        resolve();
+      });
+    });
+
+    Promise.all([existingUser, existingEmail])
+      .then(() => {
+        bcrypt
+          .hash(password, 10)
+          .then((hashedPassword) => {
+            const user = new UserModel({
+              username,
+              email,
+              password: hashedPassword,
+              profile: profile || "",
+            });
+            user
+              .save()
+              .then((result) => {
+                return res
+                  .status(200)
+                  .send({ message: "User register successfully..." });
+              })
+              .catch((err) => {
+                return res.status(500).send({ err });
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(500)
+              .send({ error: "Enable to hashed password..." });
+          });
+      })
+      .catch((error) => {
+        return res.status(500).send({ error });
+      });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
 }
 
 /** POST: http://localhost:8080/api/login 
