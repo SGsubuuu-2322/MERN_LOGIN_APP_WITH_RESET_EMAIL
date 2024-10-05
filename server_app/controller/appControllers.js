@@ -1,5 +1,7 @@
 import UserModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import ENV from "../config.js";
 
 /** POST: http://localhost:8080/api/register 
  * @param : {
@@ -13,22 +15,6 @@ import bcrypt from "bcrypt";
   "profile": ""
 }
 */
-
-const credentialsChecking = async ({ username, email }) => {
-  if (username) {
-    const existingUser = await UserModel.findOne({ username });
-    if (existingUser) {
-      throw new Error("Username already exists. Try with a new one...");
-    }
-  }
-
-  if (email) {
-    const existingEmail = await UserModel.findOne({ email });
-    if (existingEmail) {
-      throw new Error("Email already exists. Try with a new one...");
-    }
-  }
-};
 
 export async function register(req, res) {
   try {
@@ -45,8 +31,15 @@ export async function register(req, res) {
       return res.status(400).json({ message: "Password is required." });
     }
 
-    await credentialsChecking({ username, email });
+    const existingUser = await UserModel.findOne({ username });
+    if (existingUser) {
+      throw new Error("Username already exists. Try with a new one...");
+    }
 
+    const existingEmail = await UserModel.findOne({ email });
+    if (existingEmail) {
+      throw new Error("Email already exists. Try with a new one...");
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new UserModel({
@@ -75,7 +68,55 @@ export async function register(req, res) {
 }
 */
 export async function login(req, res) {
-  res.status(200).json("login route");
+  try {
+    const { username, password } = req.body;
+
+    // Input validation to ensure that required fields are present
+    if (!username) {
+      return res.status(400).json({ message: "Username is required." });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Username is required." });
+    }
+
+    // Checking for the username in database...
+    const existingUser = await UserModel.findOne({ username });
+    if (!existingUser) {
+      return res.status(400).json({
+        message:
+          "Error in Credentials validation. Username doesn't exist. Try once again...",
+      });
+    }
+
+    // Checking for the password validation...
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        message:
+          "Error in Credentials validation. Wrong password. Try once again...",
+      });
+    }
+    // Generating JWT token for the user...
+    const token = jwt.sign(
+      {
+        user: existingUser._id,
+        username: existingUser.username,
+      },
+      ENV.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({
+      message: "Login successful...",
+      user: existingUser.username,
+      token,
+    });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 }
 
 /** GET: http://localhost:8080/api/user/example123 */
