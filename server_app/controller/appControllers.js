@@ -14,63 +14,57 @@ import bcrypt from "bcrypt";
 }
 */
 
+const credentialsChecking = async ({ username, email }) => {
+  if (username) {
+    const existingUser = await UserModel.findOne({ username });
+    if (existingUser) {
+      throw new Error("Username already exists. Try with a new one...");
+    }
+  }
+
+  if (email) {
+    const existingEmail = await UserModel.findOne({ email });
+    if (existingEmail) {
+      throw new Error("Email already exists. Try with a new one...");
+    }
+  }
+};
+
 export async function register(req, res) {
   try {
     const { username, email, password, profile } = req.body;
 
-    // Checking for the username
-    const existingUser = new Promise((resolve, reject) => {
-      UserModel.findOne({ username }, (err, user) => {
-        if (err) reject(new Error(err));
-        if (user) reject({ error: "Please use unique username..." });
+    // Input validation to ensure that required fields are present
+    if (!username) {
+      return res.status(400).json({ message: "Username is required." });
+    }
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Password is required." });
+    }
 
-        resolve();
-      });
+    await credentialsChecking({ username, email });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new UserModel({
+      username,
+      email,
+      password: hashedPassword,
+      profile: profile || "",
     });
 
-    // Checking for the email
-    const existingEmail = new Promise((resolve, reject) => {
-      UserModel.findOne({ email }, (err, email) => {
-        if (err) reject(new Error(err));
-        if (email) reject({ error: "Please use unique email..." });
-
-        resolve();
-      });
+    await user.save();
+    return res.status(201).json({
+      message: "User registered successfully",
+      user_id: user._id,
     });
-
-    Promise.all([existingUser, existingEmail])
-      .then(() => {
-        bcrypt
-          .hash(password, 10)
-          .then((hashedPassword) => {
-            const user = new UserModel({
-              username,
-              email,
-              password: hashedPassword,
-              profile: profile || "",
-            });
-            user
-              .save()
-              .then((result) => {
-                return res
-                  .status(200)
-                  .send({ message: "User register successfully..." });
-              })
-              .catch((err) => {
-                return res.status(500).send({ err });
-              });
-          })
-          .catch((error) => {
-            return res
-              .status(500)
-              .send({ error: "Enable to hashed password..." });
-          });
-      })
-      .catch((error) => {
-        return res.status(500).send({ error });
-      });
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(400).json({
+      message: error.message,
+    });
   }
 }
 
