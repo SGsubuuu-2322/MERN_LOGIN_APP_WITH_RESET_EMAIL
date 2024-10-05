@@ -1,3 +1,3 @@
 export default {
-  JWT_SECRET: "Subham@123",
+  JWT_SECRET: "/KSaQnPLBoZWlptlqwohFuevQv5QgCzLUSeF7oEANig=",
 };
