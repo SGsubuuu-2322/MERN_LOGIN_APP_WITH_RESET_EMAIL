@@ -134,7 +134,23 @@ export async function login(req, res) {
 
 /** GET: http://localhost:8080/api/user/example123 */
 export async function getUser(req, res) {
-  res.status(200).json("getUser route");
+  try {
+    const { username } = req.params;
+
+    if (!username)
+      return res.status(501).send({ error: "Invalid Username!!!" });
+
+    const user = await UserModel.findOne({ username });
+    if (!user) return res.status(404).send({ message: "User not found!!!" });
+
+    const { password, ...rest } = Object.assign({}, user.toJSON());
+
+    return res.status(201).send({ rest });
+  } catch (error) {
+    return res.status(404).send({
+      error: error.message,
+    });
+  }
 }
 
 /** PUT: http://localhost:8080/api/updateuser 

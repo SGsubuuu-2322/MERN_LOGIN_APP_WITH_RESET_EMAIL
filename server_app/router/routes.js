@@ -8,7 +8,7 @@ router.route("/register").post(controller.register); //use to register a user...
 
 // router.route("/registerMail").post(); //use to send the mail
 router.route("/authenticate").post((req, res) => res.end()); //use to authenticate a user
-router.route("/login").post(controller.login); //use to login a user in our app
+router.route("/login").post(controller.verifyUser, controller.login); //use to login a user in our app
 
 // GET Methods
 router.route("/user/:username").get(controller.getUser); //use to get the user details
