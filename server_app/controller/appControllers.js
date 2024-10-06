@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ENV from "../config.js";
 import otpGenerator from "otp-generator";
+import userModel from "../models/user.model.js";
 
 export async function verifyUser(req, res, next) {
   try {
@@ -222,5 +223,40 @@ export async function createResetSession(req, res) {
 // update the password when we have valid session
 /** PUT: http://localhost:8080/api/resetPassword */
 export async function resetPassword(req, res) {
-  res.status(200).json("update user route");
+  try {
+    const { username, password } = req.body;
+
+    // Input validation to ensure that required fields are present
+    if (!username) {
+      return res.status(400).json({ message: "Username is required." });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Password is required." });
+    }
+
+    const user = await UserModel.findOne({ username });
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found!!!" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    if (hashedPassword) {
+      await userModel.updateOne(
+        { username: user.username },
+        { password: hashedPassword }
+      );
+
+      return res
+        .status(201)
+        .send({ message: "Password updation successfully!!!" });
+    } else {
+      return res
+        .status(401)
+        .send({ error: "Unable to hashed the password!!!" });
+    }
+  } catch (error) {
+    return res.status(401).send({ error });
+  }
 }

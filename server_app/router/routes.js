@@ -21,6 +21,6 @@ router.route("/createResetSession").get(controller.createResetSession); //use to
 
 // PUT Methods
 router.route("/updateUser").put(middleware.auth, controller.updateUser); //use to update the user details
-router.route("/resetPassword").put(controller.resetPassword); //use to reset the password of a user
+router.route("/resetPassword").put(middleware.auth, controller.resetPassword); //use to reset the password of a user
 
 export default router;
