@@ -115,7 +115,7 @@ export async function login(req, res) {
     // Generating JWT token for the user...
     const token = jwt.sign(
       {
-        user: existingUser._id,
+        userId: existingUser._id,
         username: existingUser.username,
       },
       ENV.JWT_SECRET,
@@ -164,7 +164,23 @@ body: {
 }
 */
 export async function updateUser(req, res) {
-  res.status(200).json("update user route");
+  try {
+    const { userId } = req.user;
+
+    if (userId) {
+      const body = req.body;
+
+      await UserModel.updateOne({ _id: userId }, body);
+
+      return res.status(201).send({
+        message: "User profile updation successfull...",
+      });
+    }
+  } catch (error) {
+    return res.status(401).send({
+      error: error.message,
+    });
+  }
 }
 
 /** GET: http://localhost:8080/api/generateOTP */
