@@ -27,3 +27,11 @@ export async function auth(req, res, next) {
     return res.status(404).send({ message: "Authentication failed!!!" });
   }
 }
+
+export async function localVariables(req, res, next) {
+  req.app.locals = {
+    OTP: null,
+    resetSession: false,
+  };
+  next();
+}

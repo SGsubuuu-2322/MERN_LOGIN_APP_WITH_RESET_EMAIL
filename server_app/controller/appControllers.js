@@ -2,6 +2,7 @@ import UserModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ENV from "../config.js";
+import otpGenerator from "otp-generator";
 
 export async function verifyUser(req, res, next) {
   try {
@@ -185,7 +186,13 @@ export async function updateUser(req, res) {
 
 /** GET: http://localhost:8080/api/generateOTP */
 export async function generateOtp(req, res) {
-  res.status(200).json("update user route");
+  req.app.locals.OTP = await otpGenerator.generate(6, {
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  });
+
+  return res.status(201).send({ code: req.app.locals.OTP });
 }
 
 /** GET: http://localhost:8080/api/verifyOTP */
