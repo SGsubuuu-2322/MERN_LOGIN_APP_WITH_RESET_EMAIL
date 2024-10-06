@@ -197,7 +197,15 @@ export async function generateOtp(req, res) {
 
 /** GET: http://localhost:8080/api/verifyOTP */
 export async function verifyOtp(req, res) {
-  res.status(200).json("update user route");
+  const { code } = req.body;
+
+  if (parseInt(req.app.locals.OTP) === parseInt(code)) {
+    req.app.locals.OTP = null;
+    req.app.locals.resetSession = true;
+    return res.status(200).send({ message: "OTP verified successfully..." });
+  }
+
+  return res.status(400).send({ error: "Invalid OTP!!!" });
 }
 
 // successfully redirect user when OTP is valid

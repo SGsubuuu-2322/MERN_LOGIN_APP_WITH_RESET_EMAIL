@@ -16,7 +16,7 @@ router.route("/user/:username").get(middleware.auth, controller.getUser); //use 
 router
   .route("/generateOtp")
   .get(middleware.auth, middleware.localVariables, controller.generateOtp); //use to generate random otp
-router.route("/verifyOtp").get(controller.verifyOtp); //use to verify the otp
+router.route("/verifyOtp").get(middleware.auth, controller.verifyOtp); //use to verify the otp
 router.route("/createResetSession").get(controller.createResetSession); //use to reset all the variables
 
 // PUT Methods
