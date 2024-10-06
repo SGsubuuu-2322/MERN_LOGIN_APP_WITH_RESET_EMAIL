@@ -15,12 +15,18 @@ router.route("/login").post(controller.verifyUser, controller.login); //use to l
 router.route("/user/:username").get(middleware.auth, controller.getUser); //use to get the user details
 router
   .route("/generateOtp")
-  .get(middleware.auth, middleware.localVariables, controller.generateOtp); //use to generate random otp
-router.route("/verifyOtp").get(middleware.auth, controller.verifyOtp); //use to verify the otp
+  .get(
+    controller.verifyUser,
+    middleware.localVariables,
+    controller.generateOtp
+  ); //use to generate random otp
+router.route("/verifyOtp").get(controller.verifyUser, controller.verifyOtp); //use to verify the otp
 router.route("/createResetSession").get(controller.createResetSession); //use to reset all the variables
 
 // PUT Methods
 router.route("/updateUser").put(middleware.auth, controller.updateUser); //use to update the user details
-router.route("/resetPassword").put(middleware.auth, controller.resetPassword); //use to reset the password of a user
+router
+  .route("/resetPassword")
+  .put(controller.verifyUser, controller.resetPassword); //use to reset the password of a user
 
 export default router;

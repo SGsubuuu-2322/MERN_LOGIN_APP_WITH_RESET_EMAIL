@@ -213,8 +213,8 @@ export async function verifyOtp(req, res) {
 /** GET: http://localhost:8080/api/createResetSession */
 export async function createResetSession(req, res) {
   if (req.app.locals.resetSession) {
-    req.app.locals.resetSession = false;
-    return res.status(201).send({ message: "Access Granted!!!" });
+    // req.app.locals.resetSession = false;
+    return res.status(201).send({ flag: req.app.locals.resetSession });
   }
 
   return res.status(440).send({ error: "Session expired!!!" });
@@ -224,6 +224,9 @@ export async function createResetSession(req, res) {
 /** PUT: http://localhost:8080/api/resetPassword */
 export async function resetPassword(req, res) {
   try {
+    if (!req.app.locals.resetSession)
+      return res.status(440).send({ error: "Session expired!" });
+
     const { username, password } = req.body;
 
     // Input validation to ensure that required fields are present
@@ -248,12 +251,14 @@ export async function resetPassword(req, res) {
         { password: hashedPassword }
       );
 
+      req.app.locals.resetSession = false;
+
       return res
         .status(201)
         .send({ message: "Password updation successfully!!!" });
     } else {
       return res
-        .status(401)
+        .status(500)
         .send({ error: "Unable to hashed the password!!!" });
     }
   } catch (error) {
