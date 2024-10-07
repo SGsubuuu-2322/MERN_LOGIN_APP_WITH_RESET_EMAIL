@@ -9,11 +9,13 @@ const router = Router();
 router.route("/register").post(controller.register); //use to register a user...
 
 router.route("/registerMail").post(registerMail); //use to send the mail
-router.route("/authenticate").post((req, res) => res.end()); //use to authenticate a user
+router
+  .route("/authenticate")
+  .post(controller.verifyUser, (req, res) => res.end()); //use to authenticate a user
 router.route("/login").post(controller.verifyUser, controller.login); //use to login a user in our app
 
 // GET Methods
-router.route("/user/:username").get(middleware.auth, controller.getUser); //use to get the user details
+router.route("/user/:username").get(controller.getUser); //use to get the user details
 router
   .route("/generateOtp")
   .get(

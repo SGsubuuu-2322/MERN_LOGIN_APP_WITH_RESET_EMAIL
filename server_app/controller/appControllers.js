@@ -67,7 +67,6 @@ export async function register(req, res) {
     await user.save();
     return res.status(201).json({
       message: "User registered successfully",
-      user_id: user._id,
     });
   } catch (error) {
     return res.status(400).json({
@@ -198,7 +197,7 @@ export async function generateOtp(req, res) {
 
 /** GET: http://localhost:8080/api/verifyOTP */
 export async function verifyOtp(req, res) {
-  const { code } = req.body;
+  const { code } = req.query;
 
   if (parseInt(req.app.locals.OTP) === parseInt(code)) {
     req.app.locals.OTP = null;
