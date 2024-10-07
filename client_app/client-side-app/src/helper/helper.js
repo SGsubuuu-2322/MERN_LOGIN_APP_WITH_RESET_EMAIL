@@ -109,3 +109,16 @@ export async function verifyOTP(username, otp) {
     return Promise.reject(error);
   }
 }
+
+// ResetPassword function for reseting the handling the reset password network action...
+export async function resetPassword(username, password) {
+  try {
+    const { data, status } = await axios.put("/api/resetPassword", {
+      username,
+      password,
+    });
+    return Promise.resolve({ data, status });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
