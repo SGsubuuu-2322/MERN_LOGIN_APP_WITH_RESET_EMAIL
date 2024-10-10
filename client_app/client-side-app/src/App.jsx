@@ -9,6 +9,7 @@ import Recovery from "./components/Recovery";
 import Reset from "./components/Reset";
 import PageNotFound from "./components/PageNotFound";
 
+// Creating all the routes for the navigation...
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+//Setting it up with main component...
 function App() {
   return (
     <main>
@@ -52,4 +54,5 @@ function App() {
   );
 }
 
+// Exporting the app...
 export default App;
