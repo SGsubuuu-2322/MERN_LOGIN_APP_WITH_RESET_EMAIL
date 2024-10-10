@@ -1,7 +1,9 @@
+// importing all the packages for sending mail...
 import nodemailer from "nodemailer";
 import ENV from "../config.js";
 import Mailgen from "mailgen";
 
+// Creating the transporter for sending the mail from server end point...
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: "smtp.gmail.com",
@@ -13,6 +15,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Configuring the mailgenerator for mail body template....
 let MailGenerator = new Mailgen({
   theme: "default",
   product: {
@@ -38,6 +41,7 @@ let MailGenerator = new Mailgen({
 }
 */
 
+// controller function for sending the mail when called...
 export default async function registerMail(req, res) {
   try {
     const { username, userEmail, text, subject } = req.body;
