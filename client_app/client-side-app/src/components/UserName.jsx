@@ -24,9 +24,17 @@ function UserName() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      setUsername(values.username);
-      console.log(values);
-      // navigate("/password");
+      // Run the validation before proceeding
+      const errors = await formik.validateForm(values);
+
+      // If there are no errors, proceed to navigate
+      if (Object.keys(errors).length === 0) {
+        setUsername(values.username);
+        navigate("/password");
+      } else {
+        // If there are errors, do not navigate
+        console.log("Validation failed, not navigating");
+      }
     },
   });
 

@@ -11,6 +11,7 @@ export async function usernameValidate(values) {
 
     if (status !== 200) {
       errors.exist = toast.error("User does not exist...!");
+      return (errors.exist = "User doesn't exists...");
     }
   }
 
