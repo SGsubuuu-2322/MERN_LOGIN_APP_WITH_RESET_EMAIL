@@ -1,7 +1,8 @@
 /** authenticate function */
 import axios from "axios";
 
-axios.defaults.baseURL = import.meta.env.REACT_APP_SERVER_DOMAIN;
+// axios.defaults.baseURL = import.meta.env.REACT_APP_SERVER_DOMAIN;
+axios.defaults.baseURL = "http://localhost:8080";
 
 // Authenticate function for user authentication
 export async function authenticate(username) {
