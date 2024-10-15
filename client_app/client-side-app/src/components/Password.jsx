@@ -33,9 +33,14 @@ function Password() {
       toast.promise(loginPromise, {
         loading: "Checking...",
         success: <b>Login successfully...</b>,
-        error: <b>Could not login...</b>,
+        error: <b>Password not matched...</b>,
       });
-      loginPromise.then(() => navigate("/profile"));
+      loginPromise.then((res) => {
+        console.log(res);
+        let token = res.token;
+        localStorage.setItem("token", token);
+        navigate("/profile");
+      });
     },
   });
 
