@@ -13,7 +13,7 @@ function Password() {
   const { username } = useAuthStore((state) => state.auth);
   const [{ isLoading, apiData, serverError }] = useFetch(`/user/${username}`);
 
-  console.log(apiData);
+  // console.log(apiData);
 
   const formik = useFormik({
     initialValues: {
@@ -51,16 +51,13 @@ function Password() {
           <form className="py-1" onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <img
-                src={
-                  apiData?.rest?.profile
-                    ? `data:image/png;base64,${apiData?.rest?.profile}`
-                    : avatar
-                }
+                src={apiData?.rest?.profile ? apiData?.rest?.profile : avatar}
                 className={styles.profile_img}
                 alt="avatar"
               />
             </div>
 
+            {/* `data:image/png;base64,${apiData?.rest?.profile}` */}
             <div className="textbox flex flex-col items-center gap-3">
               <input
                 {...formik.getFieldProps("password")}

@@ -31,14 +31,14 @@ export async function registerUser(credentials) {
       status,
     } = await axios.post("api/register", credentials);
 
-    let { username, mail } = credentials;
+    let { username, email } = credentials;
 
     // send mail
 
     if (status === 201) {
       await axios.post("api/registerMail", {
         username,
-        userEmail: mail,
+        userEmail: email,
         text: message,
       });
     }
