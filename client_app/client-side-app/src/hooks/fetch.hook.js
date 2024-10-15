@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+// Custom hook...
 export default function useFetch(query) {
-  const [data, setData] = useState({
+  const [getData, setData] = useState({
     isLoading: false,
     apiData: undefined,
     status: null,
@@ -27,4 +28,6 @@ export default function useFetch(query) {
     };
     fetchData();
   }, [query]);
+
+  return [getData, setData];
 }
