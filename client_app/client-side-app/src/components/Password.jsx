@@ -36,7 +36,7 @@ function Password() {
         error: <b>Password not matched...</b>,
       });
       loginPromise.then((res) => {
-        console.log(res);
+        // console.log(res);
         let token = res.token;
         localStorage.setItem("token", token);
         navigate("/profile");
