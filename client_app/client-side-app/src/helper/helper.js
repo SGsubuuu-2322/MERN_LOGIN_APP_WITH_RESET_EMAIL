@@ -93,13 +93,13 @@ export async function generateOTP(username) {
       status,
     } = await axios.get("/api/generateOtp", { params: { username } });
     if (status === 201) {
-      let {
-        data: { email },
-      } = await getUser(username);
+      let { data } = await getUser({ username });
+
+      const email = data?.rest?.email;
 
       let text = `Your Password Recovery OTP is ${code}. Verify and recover your password.`;
 
-      await axios.get("/api/registerMail", {
+      await axios.post("/api/registerMail", {
         username,
         userEmail: email,
         text,
@@ -113,10 +113,10 @@ export async function generateOTP(username) {
 }
 
 // VerifyOTP function for verifying the OTP input by the user...
-export async function verifyOTP({ username, otp }) {
+export async function verifyOTP({ username, code }) {
   try {
     const { data, status } = await axios.get("/api/verifyOtp", {
-      params: { username, otp },
+      params: { username, code },
     });
     return { data, status };
   } catch (error) {

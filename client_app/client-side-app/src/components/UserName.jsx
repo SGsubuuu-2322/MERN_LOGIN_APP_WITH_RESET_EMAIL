@@ -26,7 +26,6 @@ function UserName() {
       // If there are no errors, proceed to navigate
       if (Object.keys(errors).length === 0) {
         setUsername(values.username);
-        console.log(values);
         navigate("/password");
       } else {
         // If there are errors, do not navigate
