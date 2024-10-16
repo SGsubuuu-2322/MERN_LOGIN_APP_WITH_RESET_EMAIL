@@ -1,7 +1,7 @@
 # Welcome to MERN Login System
 
-Hello everyone, In this project, we are creating **MERN Stack App with Login System**.
-We will take a look at how to create login, registration, profile, reset password routes and send Mail from the Node.js backend application.
+Hello everyone, In this project, I'm going to creating **MERN Stack App with Login System**.
+
 
 ## Working with the Project
 
