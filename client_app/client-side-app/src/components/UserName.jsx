@@ -6,16 +6,12 @@ import { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { usernameValidate } from "../helper/validate";
 import { useAuthStore } from "../store/store";
-import { useEffect } from "react";
 
 function UserName() {
   const navigate = useNavigate();
   const setUsername = useAuthStore((state) => state.setUsername);
-  const username = useAuthStore((state) => state.auth.username);
+  // const username = useAuthStore((state) => state.auth.username);
 
-  useEffect(() => {
-    console.log(username);
-  }, []);
   const formik = useFormik({
     initialValues: {
       username: "example123",
@@ -30,6 +26,7 @@ function UserName() {
       // If there are no errors, proceed to navigate
       if (Object.keys(errors).length === 0) {
         setUsername(values.username);
+        console.log(values);
         navigate("/password");
       } else {
         // If there are errors, do not navigate

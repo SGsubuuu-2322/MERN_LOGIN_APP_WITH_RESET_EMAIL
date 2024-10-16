@@ -1,8 +1,19 @@
 /** authenticate function */
 import axios from "axios";
-
+import { jwtDecode } from "jwt-decode";
 // axios.defaults.baseURL = import.meta.env.REACT_APP_SERVER_DOMAIN;
 axios.defaults.baseURL = "http://localhost:8080";
+
+// Make API Requests...
+
+// To get username from token
+export async function getUserName() {
+  const token = await localStorage.getItem("token");
+  if (!token) return Promise.reject("Cannot find token...");
+  const decode = jwtDecode(token);
+  // console.log(decode);
+  return decode;
+}
 
 // Authenticate function for user authentication
 export async function authenticate(username) {

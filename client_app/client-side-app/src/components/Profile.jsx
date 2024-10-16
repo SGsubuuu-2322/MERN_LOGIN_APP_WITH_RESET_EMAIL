@@ -9,15 +9,13 @@ import { profileValidation } from "../helper/validate";
 import { useState } from "react";
 import convertToBase64 from "../helper/convert";
 import useFetch from "../hooks/fetch.hook";
-import { useAuthStore } from "../store/store";
 import { updateUser } from "../helper/helper";
 // import { useAuthStore } from '../store/store'
 
 function Profile() {
   const navigate = useNavigate();
-  const { username } = useAuthStore((state) => state.auth);
   const [file, setFile] = useState();
-  const [{ isLoading, apiData, serverError }] = useFetch(`/user/${username}`);
+  const [{ isLoading, apiData, serverError }] = useFetch();
   console.log(apiData);
 
   const formik = useFormik({
@@ -58,6 +56,11 @@ function Profile() {
     return (
       <h1 className="text-2xl font-bold text-red-500">{serverError.message}</h1>
     );
+
+  async function userLogout() {
+    await localStorage.removeItem("token");
+    navigate("/");
+  }
 
   return (
     <div className="container mx-auto">
@@ -138,9 +141,9 @@ function Profile() {
             <div className="text-center">
               <span className="text-gray-500">
                 Come back later ?{" "}
-                <Link className="text-red-500" to="/">
-                  Login Out
-                </Link>
+                <button onClick={userLogout} className="text-red-500" to="/">
+                  Logut
+                </button>
               </span>
             </div>
           </form>
