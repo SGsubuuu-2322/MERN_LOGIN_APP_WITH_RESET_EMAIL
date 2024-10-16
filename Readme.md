@@ -2,7 +2,6 @@
 
 Hello everyone, In this project, I'm going to creating **MERN Stack App with Login System**.
 
-
 ## Working with the Project
 
 Download this project from above link. Create two configaration files into the project.
@@ -23,8 +22,8 @@ config.js
 ```
 export default {
     JWT_SECRET : "<secret>",
-    EMAIL: "steve.franecki@ethereal.email", // testing email & password
-    PASSWORD : "sMf46xCzrvdrxvuagc",
+    MAIL_USER: "steve.franecki@gmail.com", // testing email & password
+    MAIL_PASS: "sMf46xCzrvdrxvuagc",  //I have used gmail smtp for sending mail. So, you to use the GMAIL APP_Passkey
     ATLAS_URI: "<MONGODB_ATLAS_URI>"
 }
 ```

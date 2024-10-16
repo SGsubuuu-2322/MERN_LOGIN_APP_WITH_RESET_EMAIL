@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-// import { MongoMemoryServer } from "mongodb-memory-server";
+import ENV from "../config.js";
 
 export default async function connect() {
   // const mongod = await MongoMemoryServer.create();
@@ -7,7 +7,7 @@ export default async function connect() {
 
   // mongoose.set("strictQuery", true);
 
-  const db = await mongoose.connect("mongodb://localhost:27017/MERN_LOGIN-APP");
+  const db = await mongoose.connect(ENV.ATLAS_URI);
   console.log("Databse Connected!!!");
   return db;
 }
